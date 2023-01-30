@@ -1,5 +1,7 @@
 projects = chunk concordance ligate phase split_reference
 
+COMPILATION_ENV = docker
+
 .PHONY: all $(projects)
 
 all: $(projects)
