@@ -222,16 +222,22 @@ void chunker::chunk() {
 		split_sequential(fd, cidx, chrID, 0, positions_all_mb.size() - 1, false);
 
 		int i=0;
-		while ((chunk_cm_length.back() < window_cm || chunk_mb_length.back() < window_mb) && i<10000)
-		{
-			chunk_cm_length.clear();
-			chunk_mb_length.clear();
-			chunk_common_count.clear();
-			window_count+=100;
-			cidx=0;
-			vrb.progress("First solution failed. Trying again: [" + stb.str(window_cm) + " cM | " + stb.str(window_mb/1e6) + " Mb | " + stb.str(window_count) + " common variants]" + "\tAttempt " + stb.str(i+1) + "/10000.", i/10000);
-			split_sequential(fd, cidx, chrID, 0, positions_all_mb.size() - 1, false);
-			++i;
+
+		int i=0;
+		if (window_cm < positions_all_cm.back() - positions_all_cm[0] + 1 || window_mb < positions_all_mb.back() - positions_all_mb[0] + 1) {
+			vrb.bullet("Input region is smaller than the minimum window size. Returning a single chunk over the entire input region.")
+		} else {
+			while ((chunk_cm_length.back() < window_cm || chunk_mb_length.back() < window_mb) && i<10000)
+			{
+				chunk_cm_length.clear();
+				chunk_mb_length.clear();
+				chunk_common_count.clear();
+				window_count+=100;
+				cidx=0;
+				vrb.progress("First solution failed. Trying again: [" + stb.str(window_cm) + " cM | " + stb.str(window_mb/1e6) + " Mb | " + stb.str(window_count) + " common variants]" + "\tAttempt " + stb.str(i+1) + "/10000.", i/10000);
+				split_sequential(fd, cidx, chrID, 0, positions_all_mb.size() - 1, false);
+				++i;
+			}
 		}
 		if (i==10000)
 		{
