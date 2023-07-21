@@ -5,10 +5,15 @@
 #include <containers/haplotype_set.h>
 #include <boost/archive/binary_iarchive.hpp>
 
+
 int main(int argc, char ** argv) {
+    if (argc != 2) {
+        vrb.error("Invalid command line options. Usage: GLIMPSE2_extract_sites_from_chunk {path_to_reference.bin}");
+    }
+
 	haplotype_set H;
 
-    const std::string reference_filename = "/bge/glimpse2/test/input/reference_panel_contigindex_0019_chunkindex_0000_chr20_1_9304228.bin";
+    const std::string reference_filename = argv[1];
 	std::ifstream ifs(reference_filename, std::ios::binary | std::ios_base::in);
     if (!ifs.good()) vrb.error("Reading binary reference panel file: [" + reference_filename + "]. File not good(): eofbit, failbit or badbit set or file not found.");
     try
