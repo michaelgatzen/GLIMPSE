@@ -184,7 +184,7 @@ void genotype_writer::writeGenotypes(const std::string fname, OutputFormat outpu
 		float freq_alt_main = ds_sum / H.n_tar_haps;
 		float infoscore = (H.fploidy == 2 && freq_alt_main>0.0 && freq_alt_main<1.0) ? (float)(1.0 - (ds4_sum - ds2_sum) / (H.n_tot_haps * freq_alt_main * (1.0 - freq_alt_main))) : 1.0f;
 		infoscore = (infoscore<0.0f)?0.0f:infoscore;
-		infoscore = roundf(infoscore * 1000.0) / 1000.0;
+		infoscore = roundf(infoscore * 1000000.0) / 1000000.0;
 		bcf_update_info_float(hdr, rec, "RAF", &freq_alt_refp, 1);
 		bcf_update_info_float(hdr, rec, "AF", &freq_alt_main, 1);
 		if (H.fploidy>0) bcf_update_info_float(hdr, rec, "INFO", &infoscore, 1);
